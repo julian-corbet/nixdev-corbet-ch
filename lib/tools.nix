@@ -57,6 +57,32 @@
     node = { arch = "nodejs"; nixpkgs = "nodejs"; };
     pnpm = { arch = "pnpm"; nixpkgs = "pnpm"; };
     yarn = { arch = "yarn"; nixpkgs = "yarn"; };
+
+    # An interpreter and a fast env/package manager -- the floor under a per-project uv/venv
+    # workflow, deliberately WITHOUT the scientific stack or any ML framework. Those belong in
+    # per-project environments, reproducible per repo, not as one global version fighting every
+    # project that disagrees with it.
+    python = { arch = "python"; nixpkgs = "python3"; };
+    uv = { arch = "uv"; nixpkgs = "uv"; };
+
+    # rustup, not rust: a toolchain MANAGER, because Rust work routinely needs a pinned or nightly
+    # toolchain per project and a single system rustc cannot express that. `rust` exists on both
+    # platforms if you genuinely want one fixed compiler instead.
+    rustup = { arch = "rustup"; nixpkgs = "rustup"; };
+  };
+
+  # ── Editors ─────────────────────────────────────────────────────────────────────────────────
+  # Named, never defaulted. Editor choice is the most personal selection in this table and there
+  # is no house pick -- an empty selection is the correct state for a machine whose owner has not
+  # said. Listed here only so the choice is declared rather than hand-installed and forgotten.
+  editors = {
+    neovim = { arch = "neovim"; nixpkgs = "neovim"; };
+    helix = { arch = "helix"; nixpkgs = "helix"; };
+    emacs = { arch = "emacs"; nixpkgs = "emacs"; };
+    zed = { arch = "zed"; nixpkgs = "zed-editor"; };
+    # The MIT-licensed build, not Microsoft's branded binary -- that one is AUR-only on Arch and
+    # unfree in nixpkgs, so it would not resolve cleanly on either platform from this table.
+    vscode = { arch = "code"; nixpkgs = "vscodium"; };
   };
 
   # ── git beyond git ──────────────────────────────────────────────────────────────────────────
