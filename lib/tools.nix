@@ -1,0 +1,81 @@
+#
+# The tool catalogue: one entry per selectable tool, naming it on each platform.
+#
+# WHY A TABLE AND NOT ROLES. nixdesktop declares *roles* ("a file manager") because desktop
+# components are interchangeable — thunar and nautilus fill the same slot. Dev tools are not like
+# that: `pulumi` is not "an IaC implementation you might swap for another", it is the thing you
+# asked for by name. So the indirection here is narrower and honest about it — a selection resolves
+# to a package NAME, and the only thing that varies by platform is that name.
+#
+# `arch` is the pacman package. `nixpkgs` is the attribute under a nixpkgs instance, or `null`
+# where no equivalent exists (AUR-only builds, vendor binaries with no nixpkgs derivation). A null
+# is not an oversight — it is the module telling a NixOS consumer that this selection cannot be
+# satisfied there, which is better than silently installing nothing.
+#
+{ ... }:
+{
+  # ── Cloud provider CLIs ─────────────────────────────────────────────────────────────────────
+  providers = {
+    gcp = { arch = "google-cloud-cli"; nixpkgs = "google-cloud-sdk"; };
+    aws = { arch = "aws-cli-v2"; nixpkgs = "awscli2"; };
+    azure = { arch = "azure-cli"; nixpkgs = "azure-cli"; };
+    cloudflare = { arch = "wrangler"; nixpkgs = "wrangler"; };
+    hetzner = { arch = "hcloud"; nixpkgs = "hcloud"; };
+    digitalocean = { arch = "doctl"; nixpkgs = "doctl"; };
+    vultr = { arch = "vultr-cli"; nixpkgs = "vultr-cli"; };
+    scaleway = { arch = "scaleway-cli"; nixpkgs = "scaleway-cli"; };
+  };
+
+  # ── Infrastructure as code ──────────────────────────────────────────────────────────────────
+  iac = {
+    pulumi = { arch = "pulumi"; nixpkgs = "pulumi"; };
+    terragrunt = { arch = "terragrunt"; nixpkgs = "terragrunt"; };
+    packer = { arch = "packer"; nixpkgs = "packer"; };
+  };
+
+  # ── Kubernetes CLIENT tooling ───────────────────────────────────────────────────────────────
+  # Deliberately clients only. Running a cluster is nixk3s's job; this is what you type at one.
+  kubernetes = {
+    k9s = { arch = "k9s"; nixpkgs = "k9s"; };
+    kubectx = { arch = "kubectx"; nixpkgs = "kubectx"; };
+    helmfile = { arch = "helmfile"; nixpkgs = "helmfile"; };
+    minikube = { arch = "minikube"; nixpkgs = "minikube"; };
+    kind = { arch = "kind-bin"; nixpkgs = "kind"; };
+  };
+
+  # ── Remote object storage ───────────────────────────────────────────────────────────────────
+  storage = {
+    rclone = { arch = "rclone"; nixpkgs = "rclone"; };
+    s3cmd = { arch = "s3cmd"; nixpkgs = "s3cmd"; };
+  };
+
+  # ── Language toolchains ─────────────────────────────────────────────────────────────────────
+  languages = {
+    go = { arch = "go"; nixpkgs = "go"; };
+    deno = { arch = "deno"; nixpkgs = "deno"; };
+    bun = { arch = "bun"; nixpkgs = "bun"; };
+    node = { arch = "nodejs"; nixpkgs = "nodejs"; };
+    pnpm = { arch = "pnpm"; nixpkgs = "pnpm"; };
+    yarn = { arch = "yarn"; nixpkgs = "yarn"; };
+  };
+
+  # ── git beyond git ──────────────────────────────────────────────────────────────────────────
+  # NOT git config: that is nixarch's home/dev.nix, which owns the settings. This is binaries.
+  gitExtras = {
+    lazygit = { arch = "lazygit"; nixpkgs = "lazygit"; };
+    delta = { arch = "git-delta"; nixpkgs = "delta"; };
+    lfs = { arch = "git-lfs"; nixpkgs = "git-lfs"; };
+    filter-repo = { arch = "git-filter-repo"; nixpkgs = "git-filter-repo"; };
+    crypt = { arch = "git-crypt"; nixpkgs = "git-crypt"; };
+    transcrypt = { arch = "transcrypt"; nixpkgs = "transcrypt"; };
+  };
+
+  # ── Build/dev ergonomics ────────────────────────────────────────────────────────────────────
+  build = {
+    just = { arch = "just"; nixpkgs = "just"; };
+    mold = { arch = "mold"; nixpkgs = "mold"; };
+    ccache = { arch = "ccache"; nixpkgs = "ccache"; };
+    patchelf = { arch = "patchelf"; nixpkgs = "patchelf"; };
+    direnv = { arch = "direnv"; nixpkgs = "direnv"; };
+  };
+}
