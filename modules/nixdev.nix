@@ -80,6 +80,21 @@ in
       '';
     };
 
+    aurPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      readOnly = true;
+      description = ''
+        Selections that live in the AUR rather than an official repo, kept SEPARATE because
+        `pacman -S` cannot resolve them -- it fails the whole transaction with "target not found",
+        which takes the rest of the converge down with it. Wire them to the AUR side:
+
+          nixarch.packages.aur = config.nixdev.aurPackages;
+
+        With no `aurUser` configured the reconciler skips them with a warning, which is the right
+        failure mode: the packages stay as they are and nothing else breaks.
+      '';
+    };
+
     unavailableOnNixos = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       readOnly = true;
@@ -92,7 +107,8 @@ in
 
   config = {
     nixdev.want = selected;
-    nixdev.archPackages = lib.unique (map (t: t.arch) selected);
+    nixdev.archPackages = lib.unique (map (t: t.arch) (lib.filter (t: !(t.aur or false)) selected));
+    nixdev.aurPackages = lib.unique (map (t: t.arch) (lib.filter (t: t.aur or false) selected));
     nixdev.unavailableOnNixos =
       lib.unique (map (t: t.arch) (lib.filter (t: t.nixpkgs == null) selected));
   };

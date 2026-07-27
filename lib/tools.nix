@@ -16,7 +16,7 @@
 {
   # ── Cloud provider CLIs ─────────────────────────────────────────────────────────────────────
   providers = {
-    gcp = { arch = "google-cloud-cli"; nixpkgs = "google-cloud-sdk"; };
+    gcp = { arch = "google-cloud-cli"; nixpkgs = "google-cloud-sdk"; aur = true; };
     aws = { arch = "aws-cli-v2"; nixpkgs = "awscli2"; };
     azure = { arch = "azure-cli"; nixpkgs = "azure-cli"; };
     cloudflare = { arch = "wrangler"; nixpkgs = "wrangler"; };
@@ -40,7 +40,7 @@
     kubectx = { arch = "kubectx"; nixpkgs = "kubectx"; };
     helmfile = { arch = "helmfile"; nixpkgs = "helmfile"; };
     minikube = { arch = "minikube"; nixpkgs = "minikube"; };
-    kind = { arch = "kind-bin"; nixpkgs = "kind"; };
+    kind = { arch = "kind-bin"; nixpkgs = "kind"; aur = true; };
   };
 
   # ── Remote object storage ───────────────────────────────────────────────────────────────────
@@ -93,7 +93,7 @@
     lfs = { arch = "git-lfs"; nixpkgs = "git-lfs"; };
     filter-repo = { arch = "git-filter-repo"; nixpkgs = "git-filter-repo"; };
     crypt = { arch = "git-crypt"; nixpkgs = "git-crypt"; };
-    transcrypt = { arch = "transcrypt"; nixpkgs = "transcrypt"; };
+    transcrypt = { arch = "transcrypt"; nixpkgs = "transcrypt"; aur = true; };
   };
 
   # ── Document processing LIBRARIES ───────────────────────────────────────────────────────────
