@@ -11,14 +11,15 @@
 let
   cfg = config.nixdev;
   wanted = lib.filter (t: t.nixpkgs != null) cfg.want;
-  missingAttrs = lib.filter (t: !(pkgs ? ${t.nixpkgs})) wanted;
+  resolves = t: lib.hasAttrByPath (lib.splitString "." t.nixpkgs) pkgs;
+  missingAttrs = lib.filter (t: !(resolves t)) wanted;
 in
 {
   imports = [ ./nixdev.nix ];
 
   config = {
     environment.systemPackages =
-      map (t: pkgs.${t.nixpkgs}) (lib.filter (t: pkgs ? ${t.nixpkgs}) wanted);
+      map (t: lib.getAttrFromPath (lib.splitString "." t.nixpkgs) pkgs) (lib.filter resolves wanted);
 
     warnings =
       lib.optional (cfg.unavailableOnNixos != [ ]) ''

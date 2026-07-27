@@ -96,6 +96,25 @@
     transcrypt = { arch = "transcrypt"; nixpkgs = "transcrypt"; };
   };
 
+  # ── Document processing LIBRARIES ───────────────────────────────────────────────────────────
+  # Here rather than in nixoffice, by that module's own test: you script against these, you never
+  # look at them. A PDF you read is office; a PDF you parse is dev, and the same file can be both
+  # depending on who opens it.
+  documents = {
+    pypdf = { arch = "python-pypdf"; nixpkgs = "python3Packages.pypdf"; };
+    pymupdf = { arch = "python-pymupdf"; nixpkgs = "python3Packages.pymupdf"; };
+    pdfplumber = { arch = "python-pdfplumber"; nixpkgs = "python3Packages.pdfplumber"; };
+    extract-msg = { arch = "python-extract-msg"; nixpkgs = "python3Packages.extract-msg"; };
+  };
+
+  # ── Typst tooling ───────────────────────────────────────────────────────────────────────────
+  # The LSP and the formatter, NOT the typst compiler itself -- that renders something a person
+  # reads, so it lives in nixoffice. Editor plumbing stays here.
+  typst = {
+    tinymist = { arch = "tinymist"; nixpkgs = "tinymist"; };
+    typstyle = { arch = "typstyle"; nixpkgs = "typstyle"; };
+  };
+
   # ── Build/dev ergonomics ────────────────────────────────────────────────────────────────────
   build = {
     just = { arch = "just"; nixpkgs = "just"; };

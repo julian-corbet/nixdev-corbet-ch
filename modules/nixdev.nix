@@ -38,6 +38,8 @@ let
     (map (k: tools.languages.${k}) cfg.languages)
     (map (k: tools.gitExtras.${k}) cfg.gitExtras)
     (map (k: tools.build.${k}) cfg.build)
+    (map (k: tools.documents.${k}) cfg.documents)
+    (map (k: tools.typst.${k}) cfg.typst)
     (map (k: tools.editors.${k}) cfg.editors)
   ];
 in
@@ -50,6 +52,8 @@ in
     languages = mkGroup "language toolchains" tools.languages;
     gitExtras = mkGroup "git tooling" tools.gitExtras;
     build = mkGroup "build and dev ergonomics" tools.build;
+    documents = mkGroup "document-processing libraries" tools.documents;
+    typst = mkGroup "typst editor tooling (LSP, formatter)" tools.typst;
     editors = mkGroup "editors" tools.editors;
 
     # ── Computed, read-only ───────────────────────────────────────────────────────────────────
