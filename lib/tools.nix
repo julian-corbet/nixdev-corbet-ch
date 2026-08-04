@@ -28,6 +28,8 @@
 
   # ── Infrastructure as code ──────────────────────────────────────────────────────────────────
   iac = {
+    # The binary is `tofu`; the package is `opentofu` on both channels.
+    opentofu = { arch = "opentofu"; nixpkgs = "opentofu"; };
     pulumi = { arch = "pulumi"; nixpkgs = "pulumi"; };
     terragrunt = { arch = "terragrunt"; nixpkgs = "terragrunt"; };
     packer = { arch = "packer"; nixpkgs = "packer"; };
