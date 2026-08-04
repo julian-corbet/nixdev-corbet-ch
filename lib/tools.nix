@@ -3,7 +3,7 @@
 #
 # WHY A TABLE AND NOT ROLES. nixdesktop declares *roles* ("a file manager") because desktop
 # components are interchangeable — thunar and nautilus fill the same slot. Dev tools are not like
-# that: `pulumi` is not "an IaC implementation you might swap for another", it is the thing you
+# that: `opentofu` is not "an IaC implementation you might swap for another", it is the thing you
 # asked for by name. So the indirection here is narrower and honest about it — a selection resolves
 # to a package NAME, and the only thing that varies by platform is that name.
 #
@@ -30,7 +30,6 @@
   iac = {
     # The binary is `tofu`; the package is `opentofu` on both channels.
     opentofu = { arch = "opentofu"; nixpkgs = "opentofu"; };
-    pulumi = { arch = "pulumi"; nixpkgs = "pulumi"; };
     terragrunt = { arch = "terragrunt"; nixpkgs = "terragrunt"; };
     packer = { arch = "packer"; nixpkgs = "packer"; };
   };
