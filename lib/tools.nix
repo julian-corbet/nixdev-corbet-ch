@@ -59,9 +59,12 @@
     pnpm = { arch = "pnpm"; nixpkgs = "pnpm"; };
     yarn = { arch = "yarn"; nixpkgs = "yarn"; };
 
-    # rustup, not rust: a toolchain MANAGER, because Rust work routinely needs a pinned or nightly
-    # toolchain per project and a single system rustc cannot express that. `rust` exists on both
-    # platforms if you genuinely want one fixed compiler instead.
+  };
+
+  # ── Rust ───────────────────────────────────────────────────────────────────────────────────
+  rust = {
+    # rustup, not rust: a toolchain manager, because Rust projects routinely need a pinned or
+    # nightly compiler and a single host rustc cannot express that.
     rustup = { arch = "rustup"; nixpkgs = "rustup"; };
   };
 

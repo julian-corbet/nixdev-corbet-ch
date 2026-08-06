@@ -34,9 +34,9 @@ at all.
 - **Editor configuration.** Which editor you use (neovim, helix, zed) and how it is configured
   belongs to nixarch's home/dev.nix or a user's dotfiles, not here. nixdev only names the
   executable.
-- **Language toolchain configuration.** This module installs `rustup` (the toolchain manager) and
-  offers `nixdev.python = [ "python" "uv" ];` as the Python host floor. Per-project Rust versions,
-  Python dependencies, virtual environments, Python versions, and Python CLI tools belong to each
+- **Language toolchain configuration.** This module offers `nixdev.rust = [ "rustup" ];` and
+  `nixdev.python = [ "python" "uv" ];` as host floors. Per-project Rust versions, Python
+  dependencies, virtual environments, Python versions, and Python CLI tools belong to each
   project's own build files and `uv.lock`, not to a host-level declaration.
 - **Build orchestration.** A host that has `just` does not hereby declare how to use it; that is
   a Justfile's concern.

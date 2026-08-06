@@ -36,6 +36,7 @@ let
     (map (k: tools.kubernetes.${k}) cfg.kubernetes)
     (map (k: tools.storage.${k}) cfg.storage)
     (map (k: tools.languages.${k}) cfg.languages)
+    (map (k: tools.rust.${k}) cfg.rust)
     (map (k: tools.python.${k}) cfg.python)
     (map (k: tools.gitExtras.${k}) cfg.gitExtras)
     (map (k: tools.build.${k}) cfg.build)
@@ -51,6 +52,7 @@ in
     kubernetes = mkGroup "Kubernetes client tools" tools.kubernetes;
     storage = mkGroup "remote storage clients" tools.storage;
     languages = mkGroup "language toolchains" tools.languages;
+    rust = mkGroup "Rust tooling" tools.rust;
     python = mkGroup "Python tooling" tools.python;
     gitExtras = mkGroup "git tooling" tools.gitExtras;
     build = mkGroup "build and dev ergonomics" tools.build;
