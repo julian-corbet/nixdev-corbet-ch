@@ -105,8 +105,8 @@
   documents = {
     pypdf = { arch = "python-pypdf"; nixpkgs = "python3Packages.pypdf"; };
     pymupdf = { arch = "python-pymupdf"; nixpkgs = "python3Packages.pymupdf"; };
-    pdfplumber = { arch = "python-pdfplumber"; nixpkgs = "python3Packages.pdfplumber"; };
-    extract-msg = { arch = "python-extract-msg"; nixpkgs = "python3Packages.extract-msg"; };
+    pdfplumber = { arch = "python-pdfplumber"; nixpkgs = "python3Packages.pdfplumber"; aur = true; };
+    extract-msg = { arch = "python-extract-msg"; nixpkgs = "python3Packages.extract-msg"; aur = true; };
   };
 
   # ── Typst tooling ───────────────────────────────────────────────────────────────────────────
