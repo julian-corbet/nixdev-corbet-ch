@@ -129,3 +129,8 @@
     direnv = { arch = "direnv"; nixpkgs = "direnv"; };
   };
 }
+    cargo-tauri = { arch = "cargo-tauri"; nixpkgs = "cargo-tauri"; };
+    github-desktop = { arch = "github-desktop"; nixpkgs = "github-desktop"; };
+    cmake = { arch = "cmake"; nixpkgs = "cmake"; };
+    tidy = { arch = "tidy"; nixpkgs = "html-tidy"; };
+    linuxdeploy-appimage = { arch = "linuxdeploy-appimage"; nixpkgs = "linuxdeploy"; aur = true; };
