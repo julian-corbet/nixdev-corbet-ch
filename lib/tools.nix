@@ -59,17 +59,18 @@
     pnpm = { arch = "pnpm"; nixpkgs = "pnpm"; };
     yarn = { arch = "yarn"; nixpkgs = "yarn"; };
 
-    # An interpreter and a fast env/package manager -- the floor under a per-project uv/venv
-    # workflow, deliberately WITHOUT the scientific stack or any ML framework. Those belong in
-    # per-project environments, reproducible per repo, not as one global version fighting every
-    # project that disagrees with it.
-    python = { arch = "python"; nixpkgs = "python3"; };
-    uv = { arch = "uv"; nixpkgs = "uv"; };
-
     # rustup, not rust: a toolchain MANAGER, because Rust work routinely needs a pinned or nightly
     # toolchain per project and a single system rustc cannot express that. `rust` exists on both
     # platforms if you genuinely want one fixed compiler instead.
     rustup = { arch = "rustup"; nixpkgs = "rustup"; };
+  };
+
+  # ── Python ─────────────────────────────────────────────────────────────────────────────────
+  # The host-level floor: an interpreter plus uv. Project pyproject.toml and uv.lock files own
+  # every dependency, virtual environment, Python version, and Python CLI beyond these two.
+  python = {
+    python = { arch = "python"; nixpkgs = "python3"; };
+    uv = { arch = "uv"; nixpkgs = "uv"; };
   };
 
   # ── Editors ─────────────────────────────────────────────────────────────────────────────────

@@ -1,7 +1,7 @@
 # nixdev
 
 A small NixOS flake module that declares operator tooling — cloud CLIs, infrastructure-as-code
-tools, Kubernetes clients, language toolchains, and build utilities — per host, replacing the
+tools, Kubernetes clients, language toolchains, Python tooling, and build utilities — per host, replacing the
 manual installation of hundreds of packages with per-group declarations that resolve to the right
 package name on each platform.
 
@@ -35,8 +35,9 @@ at all.
   belongs to nixarch's home/dev.nix or a user's dotfiles, not here. nixdev only names the
   executable.
 - **Language toolchain configuration.** This module installs `rustup` (the toolchain manager) and
-  `python` (the interpreter), but the per-project Rust versions, Python virtual environments, and
-  dependency pinning belong to each project's own build files, not to a host-level declaration.
+  offers `nixdev.python = [ "python" "uv" ];` as the Python host floor. Per-project Rust versions,
+  Python dependencies, virtual environments, Python versions, and Python CLI tools belong to each
+  project's own build files and `uv.lock`, not to a host-level declaration.
 - **Build orchestration.** A host that has `just` does not hereby declare how to use it; that is
   a Justfile's concern.
 - **Git configuration and workflows.** nixdev installs git binaries (lazygit, delta, git-lfs) but
