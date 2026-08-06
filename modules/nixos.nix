@@ -13,13 +13,17 @@ let
   wanted = lib.filter (t: t.nixpkgs != null) cfg.want;
   resolves = t: lib.hasAttrByPath (lib.splitString "." t.nixpkgs) pkgs;
   missingAttrs = lib.filter (t: !(resolves t)) wanted;
+  packageFor = t:
+    if t ? nixpkgsOverride
+    then t.nixpkgsOverride pkgs
+    else lib.getAttrFromPath (lib.splitString "." t.nixpkgs) pkgs;
 in
 {
   imports = [ ./nixdev.nix ];
 
   config = {
     environment.systemPackages =
-      map (t: lib.getAttrFromPath (lib.splitString "." t.nixpkgs) pkgs) (lib.filter resolves wanted);
+      map packageFor (lib.filter resolves wanted);
 
     warnings =
       lib.optional (cfg.unavailableOnNixos != [ ]) ''
