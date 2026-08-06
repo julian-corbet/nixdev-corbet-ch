@@ -66,6 +66,7 @@
     # rustup, not rust: a toolchain manager, because Rust projects routinely need a pinned or
     # nightly compiler and a single host rustc cannot express that.
     rustup = { arch = "rustup"; nixpkgs = "rustup"; };
+    cargo-tauri = { arch = "cargo-tauri"; nixpkgs = "cargo-tauri"; };
   };
 
   # ── Python ─────────────────────────────────────────────────────────────────────────────────
@@ -99,6 +100,7 @@
     filter-repo = { arch = "git-filter-repo"; nixpkgs = "git-filter-repo"; };
     crypt = { arch = "git-crypt"; nixpkgs = "git-crypt"; };
     transcrypt = { arch = "transcrypt"; nixpkgs = "transcrypt"; aur = true; };
+    github-desktop = { arch = "github-desktop"; nixpkgs = "github-desktop"; };
   };
 
   # ── Document processing LIBRARIES ───────────────────────────────────────────────────────────
@@ -126,11 +128,9 @@
     mold = { arch = "mold"; nixpkgs = "mold"; };
     ccache = { arch = "ccache"; nixpkgs = "ccache"; };
     patchelf = { arch = "patchelf"; nixpkgs = "patchelf"; };
-    direnv = { arch = "direnv"; nixpkgs = "direnv"; };
-  };
-}
-    cargo-tauri = { arch = "cargo-tauri"; nixpkgs = "cargo-tauri"; };
-    github-desktop = { arch = "github-desktop"; nixpkgs = "github-desktop"; };
     cmake = { arch = "cmake"; nixpkgs = "cmake"; };
     tidy = { arch = "tidy"; nixpkgs = "html-tidy"; };
     linuxdeploy-appimage = { arch = "linuxdeploy-appimage"; nixpkgs = "linuxdeploy"; aur = true; };
+    direnv = { arch = "direnv"; nixpkgs = "direnv"; };
+  };
+}
