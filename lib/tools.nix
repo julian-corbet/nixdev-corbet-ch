@@ -39,6 +39,7 @@
   kubernetes = {
     k9s = { arch = "k9s"; nixpkgs = "k9s"; };
     kubectx = { arch = "kubectx"; nixpkgs = "kubectx"; };
+    helm = { arch = "helm"; nixpkgs = "kubernetes-helm"; };
     helmfile = { arch = "helmfile"; nixpkgs = "helmfile"; };
     minikube = { arch = "minikube"; nixpkgs = "minikube"; };
     kind = { arch = "kind-bin"; nixpkgs = "kind"; aur = true; };
@@ -142,6 +143,7 @@
     cmake = { arch = "cmake"; nixpkgs = "cmake"; };
     tidy = { arch = "tidy"; nixpkgs = "html-tidy"; };
     linuxdeploy-appimage = { arch = "linuxdeploy-appimage"; nixpkgs = "linuxdeploy"; aur = true; };
+    buildah = { arch = "buildah"; nixpkgs = "buildah"; };
     direnv = { arch = "direnv"; nixpkgs = "direnv"; };
   };
 }
