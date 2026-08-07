@@ -61,8 +61,12 @@
     node = { arch = "nodejs"; nixpkgs = "nodejs"; };
     pnpm = { arch = "pnpm"; nixpkgs = "pnpm"; };
     yarn = { arch = "yarn"; nixpkgs = "yarn"; };
+    # Not a runtime or a package manager -- it rewrites the version RANGES in package.json
+    # itself, reporting and applying updates beyond what the declared ranges already allow.
+    # That is the reason to reach for it over `npm outdated`/`pnpm outdated`, which only report
+    # within the ranges you already wrote. Filed here beside node/pnpm/yarn anyway: it is the
+    # same Node-ecosystem workflow tool, not a separate class this table has a home for.
     npm-check-updates = { arch = "npm-check-updates"; nixpkgs = "npm-check-updates"; };
-
   };
 
   # ── Rust ───────────────────────────────────────────────────────────────────────────────────
