@@ -59,6 +59,7 @@
     node = { arch = "nodejs"; nixpkgs = "nodejs"; };
     pnpm = { arch = "pnpm"; nixpkgs = "pnpm"; };
     yarn = { arch = "yarn"; nixpkgs = "yarn"; };
+    npm-check-updates = { arch = "npm-check-updates"; nixpkgs = "npm-check-updates"; };
 
   };
 
