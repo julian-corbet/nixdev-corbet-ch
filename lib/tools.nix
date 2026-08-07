@@ -165,6 +165,20 @@
     typstyle = { arch = "typstyle"; nixpkgs = "typstyle"; };
   };
 
+  # ── Database inspection ─────────────────────────────────────────────────────────────────────
+  # Filed by what the tool IS -- a database inspector -- not by what happens to be inspected with
+  # it today. BoltDB is a general Go embedded key/value store; the only BoltDB user in this estate
+  # right now is the overlay's management server, but more will appear, and filing these tools
+  # under that overlay would age badly.
+  databases = {
+    # CLI for BoltDB, Go's embedded key/value store. AUR-only -- no nixpkgs derivation exists.
+    bbolt = { arch = "bbolt"; nixpkgs = null; aur = true; };
+    # TUI browser for BoltDB files.
+    boltbrowser = { arch = "boltbrowser"; nixpkgs = "boltbrowser"; aur = true; };
+    # SQLite with transparent 256-bit AES encryption.
+    sqlcipher = { arch = "sqlcipher"; nixpkgs = "sqlcipher"; };
+  };
+
   # ── Build/dev ergonomics ────────────────────────────────────────────────────────────────────
   build = {
     just = { arch = "just"; nixpkgs = "just"; };
