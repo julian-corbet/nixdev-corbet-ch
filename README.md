@@ -31,17 +31,18 @@ at all.
 
 ## What it explicitly does not own
 
-- **Editor configuration.** Which editor you use (neovim, helix, zed) and how it is configured
-  belongs to nixarch's home/dev.nix or a user's dotfiles, not here. nixdev only names the
-  executable.
+- **Editor configuration.** How an editor is configured belongs to nixarch's home/dev.nix or a
+  user's dotfiles, not here. Terminal-native editors (neovim and helix) are catalogued by nixsh;
+  nixdev names graphical development editors only.
 - **Language toolchain configuration.** This module offers `nixdev.rust = [ "rustup" ];` and
   `nixdev.python = [ "python" "uv" ];` as host floors. Per-project Rust versions, Python
   dependencies, virtual environments, Python versions, and Python CLI tools belong to each
   project's own build files and `uv.lock`, not to a host-level declaration.
 - **Build orchestration.** A host that has `just` does not hereby declare how to use it; that is
   a Justfile's concern.
-- **Git configuration and workflows.** nixdev installs git binaries (lazygit, delta, git-lfs) but
-  git settings belong to nixarch or a user's config.
+- **Git configuration and workflows.** nixdev installs git binaries (git-lfs, git-filter-repo,
+  git-crypt) but git settings belong to nixarch or a user's config. `lazygit` and `delta` are
+  catalogued by nixsh instead, by the same terminal-native test as the editors above.
 - **Document processing libraries versus document rendering.** On purpose: `pypdf` and `pdfplumber`
   are libraries you script with, so they live here. `typst` (a typesetter whose output you read)
   lives in nixoffice. The difference is consumption: does a person look at it or only a program?

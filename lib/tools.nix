@@ -91,9 +91,10 @@
   # `emacs-nox` has no display mode AT ALL, which is exactly nixsh's own stated placement test
   # ("does the tool have a display mode, and is that its DEFAULT? no -> nixsh"), putting it beside
   # neovim, helix and nano rather than beside the IDEs below.
+  # `neovim` and `helix` are NOT here, by this same group's own display-mode test above: neither
+  # has a display mode at all, so both are catalogued in nixsh's `edit` group, not this one. Only
+  # graphical development editors belong in this table.
   editors = {
-    neovim = { arch = "neovim"; nixpkgs = "neovim"; };
-    helix = { arch = "helix"; nixpkgs = "helix"; };
     zed = { arch = "zed"; nixpkgs = "zed-editor"; };
     # The MIT-licensed build, not Microsoft's branded binary -- that one is AUR-only on Arch and
     # unfree in nixpkgs, so it would not resolve cleanly on either platform from this table.
@@ -122,9 +123,10 @@
 
   # ── git beyond git ──────────────────────────────────────────────────────────────────────────
   # NOT git config: that is nixarch's home/dev.nix, which owns the settings. This is binaries.
+  #
+  # `lazygit` and `delta` are NOT here, by the editors group's own display-mode test above: neither
+  # has a display mode at all, so both are catalogued in nixsh's `git`/`core` groups, not this one.
   gitExtras = {
-    lazygit = { arch = "lazygit"; nixpkgs = "lazygit"; };
-    delta = { arch = "git-delta"; nixpkgs = "delta"; };
     lfs = { arch = "git-lfs"; nixpkgs = "git-lfs"; };
     filter-repo = { arch = "git-filter-repo"; nixpkgs = "git-filter-repo"; };
     crypt = { arch = "git-crypt"; nixpkgs = "git-crypt"; };
