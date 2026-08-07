@@ -46,8 +46,10 @@
   };
 
   # ── Remote object storage ───────────────────────────────────────────────────────────────────
+  # `rclone` is NOT here. It belongs to nixcloud (github:julian-corbet/nixcloud-corbet-ch), which
+  # declares its own `pkgs.rclone` wherever `nixcloud.enable = true` -- the same package its FUSE
+  # mount units already invoke by store path. Do not re-add it to this table.
   storage = {
-    rclone = { arch = "rclone"; nixpkgs = "rclone"; };
     s3cmd = { arch = "s3cmd"; nixpkgs = "s3cmd"; };
   };
 
