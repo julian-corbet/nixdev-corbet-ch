@@ -53,6 +53,31 @@
     s3cmd = { arch = "s3cmd"; nixpkgs = "s3cmd"; };
   };
 
+  # ── Observability / log-analytics CLIs ──────────────────────────────────────────────────────
+  # NOT `providers`: that group is cloud infrastructure you PROVISION -- compute, storage, network
+  # primitives -- via gcp/aws/azure/etc. Axiom is a hosted log-analytics SaaS you QUERY and stream
+  # data into; nothing here provisions a resource, so it does not belong beside gcp/aws just
+  # because both happen to be reached by an API key against a cloud vendor.
+  # NOT `storage`: that group is remote OBJECT storage clients (s3cmd). Axiom stores structured
+  # log/event datasets, not objects, and is never addressed by bucket/key.
+  # NOT `databases`: that group is LOCAL database FILE inspectors (bbolt, boltbrowser,
+  # sqlcipher) -- tools that open something on disk. Axiom has no local file to open; it is a
+  # remote SaaS query surface, the opposite shape. Hence its own group.
+  observability = {
+    # Axiom's own CLI (github.com/axiomhq/cli): query, stream, and manage datasets on the hosted
+    # axiom.co log-analytics platform. AUR-only -- checked three ways on 2026-08-07: `pacman -Si
+    # axiom-bin` finds it in none of this host's configured repos (core/extra/multilib nor any of
+    # the cachyos/cachyos-v3/cachyos-core-v3/cachyos-extra-v3 CachyOS repos); archlinux.org's
+    # package search returns zero results, so no Arch-family repository carries it under any
+    # name; the AUR RPC finds it (PackageBase `axiom-bin`, URL axiom.co, description "Powerful
+    # log analytics from the comfort of your command-line", maintainer axiomautomation). `aur =
+    # true` is therefore the whole answer -- unlike nixagent's `claude-code` entry, no
+    # `archRepoOn` lift applies, because no derivative's own repository resolves this name today.
+    # No nixpkgs derivation exists either, checked by force-evaluating the full top-level
+    # attribute set (27707 names, nothing matching `axiom` in any case).
+    axiom = { arch = "axiom-bin"; nixpkgs = null; aur = true; };
+  };
+
   # ── Language toolchains ─────────────────────────────────────────────────────────────────────
   languages = {
     go = { arch = "go"; nixpkgs = "go"; };

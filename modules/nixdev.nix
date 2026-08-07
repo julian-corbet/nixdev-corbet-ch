@@ -35,6 +35,7 @@ let
     (map (k: tools.iac.${k}) cfg.cloud.iac)
     (map (k: tools.kubernetes.${k}) cfg.kubernetes)
     (map (k: tools.storage.${k}) cfg.storage)
+    (map (k: tools.observability.${k}) cfg.observability)
     (map (k: tools.languages.${k}) cfg.languages)
     (map (k: tools.rust.${k}) cfg.rust)
     (map (k: tools.python.${k}) cfg.python)
@@ -52,6 +53,7 @@ in
     cloud.iac = mkGroup "infrastructure-as-code tools" tools.iac;
     kubernetes = mkGroup "Kubernetes client tools" tools.kubernetes;
     storage = mkGroup "remote storage clients" tools.storage;
+    observability = mkGroup "observability / log-analytics CLIs" tools.observability;
     languages = mkGroup "language toolchains" tools.languages;
     rust = mkGroup "Rust tooling" tools.rust;
     python = mkGroup "Python tooling" tools.python;
