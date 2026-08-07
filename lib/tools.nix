@@ -99,17 +99,24 @@
     vscode = { arch = "code"; nixpkgs = "vscodium"; };
     gnome-builder = { arch = "gnome-builder"; nixpkgs = "gnome-builder"; };
     qtcreator = { arch = "qtcreator"; nixpkgs = "qtcreator"; };
-    # JetBrains' two Apache-2.0 IDEs. nixpkgs namespaces them under `jetbrains.*` and ships each
-    # one twice: `-community` builds from the open-source tree, `-community-bin` repackages
-    # JetBrains' own prebuilt binary. The source builds are named here for the same reason vscode
-    # names vscodium just above -- this table prefers the build whose licence matches what the
-    # pacman side actually ships (Arch's own packages are Apache-2.0 too).
+    # JetBrains' two Apache-2.0 IDEs, and the one pair in this table where the obvious nixpkgs name
+    # is a TRAP. JetBrains merged its Community and Ultimate editions into a single distribution in
+    # 2025, and nixpkgs followed: `jetbrains.idea-community` and `jetbrains.pycharm-community` are
+    # now aliases that THROW ("has been removed as it has been discontinued"), while the bare
+    # `jetbrains.idea` / `jetbrains.pycharm` are the unified, UNFREE distribution. The open-source
+    # builds -- Apache-2.0, the same licence Arch's own packages carry -- kept the `-oss` suffix,
+    # and those are what belong here.
     #
-    # Keys are the full pacman names rather than a shortened `intellij`/`pycharm`: JetBrains ships
-    # a Community and an Ultimate edition of both, and a selection that does not say which one it
-    # means is exactly the ambiguity this table exists to remove.
-    intellij-idea-community-edition = { arch = "intellij-idea-community-edition"; nixpkgs = "jetbrains.idea-community"; };
-    pycharm-community-edition = { arch = "pycharm-community-edition"; nixpkgs = "jetbrains.pycharm-community"; };
+    # This is the class of error `lib.hasAttrByPath` cannot see: a throwing alias IS present as an
+    # attribute, so modules/nixos.nix's own `resolves` guard passes it and the failure only appears
+    # when a consumer force-evaluates its whole system closure. Verified by force-evaluation, not
+    # by existence, against nixpkgs 38a4887411571457d700c51c64a6e49ead2ed5ab.
+    #
+    # Keys are the full pacman names rather than a shortened `intellij`/`pycharm`, because the very
+    # distinction the upstream merge blurred -- which edition -- is one a selection should have to
+    # state out loud.
+    intellij-idea-community-edition = { arch = "intellij-idea-community-edition"; nixpkgs = "jetbrains.idea-oss"; };
+    pycharm-community-edition = { arch = "pycharm-community-edition"; nixpkgs = "jetbrains.pycharm-oss"; };
   };
 
   # ── git beyond git ──────────────────────────────────────────────────────────────────────────
