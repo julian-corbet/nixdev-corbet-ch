@@ -82,14 +82,34 @@
   # Named, never defaulted. Editor choice is the most personal selection in this table and there
   # is no house pick -- an empty selection is the correct state for a machine whose owner has not
   # said. Listed here only so the choice is declared rather than hand-installed and forgotten.
+  #
+  # `emacs` is NOT here: it moved to nixsh's `edit` group as `emacs-nox`. Two separate reasons, and
+  # the second is the one that decides it. The package was wrong -- nixpkgs' `emacs` and Arch's
+  # `emacs` are both the GTK-linked build, which is not what a terminal Emacs user wants and which
+  # CONFLICTS with `emacs-nox` in pacman, so the two can never be installed side by side. And
+  # `emacs-nox` has no display mode AT ALL, which is exactly nixsh's own stated placement test
+  # ("does the tool have a display mode, and is that its DEFAULT? no -> nixsh"), putting it beside
+  # neovim, helix and nano rather than beside the IDEs below.
   editors = {
     neovim = { arch = "neovim"; nixpkgs = "neovim"; };
     helix = { arch = "helix"; nixpkgs = "helix"; };
-    emacs = { arch = "emacs"; nixpkgs = "emacs"; };
     zed = { arch = "zed"; nixpkgs = "zed-editor"; };
     # The MIT-licensed build, not Microsoft's branded binary -- that one is AUR-only on Arch and
     # unfree in nixpkgs, so it would not resolve cleanly on either platform from this table.
     vscode = { arch = "code"; nixpkgs = "vscodium"; };
+    gnome-builder = { arch = "gnome-builder"; nixpkgs = "gnome-builder"; };
+    qtcreator = { arch = "qtcreator"; nixpkgs = "qtcreator"; };
+    # JetBrains' two Apache-2.0 IDEs. nixpkgs namespaces them under `jetbrains.*` and ships each
+    # one twice: `-community` builds from the open-source tree, `-community-bin` repackages
+    # JetBrains' own prebuilt binary. The source builds are named here for the same reason vscode
+    # names vscodium just above -- this table prefers the build whose licence matches what the
+    # pacman side actually ships (Arch's own packages are Apache-2.0 too).
+    #
+    # Keys are the full pacman names rather than a shortened `intellij`/`pycharm`: JetBrains ships
+    # a Community and an Ultimate edition of both, and a selection that does not say which one it
+    # means is exactly the ambiguity this table exists to remove.
+    intellij-idea-community-edition = { arch = "intellij-idea-community-edition"; nixpkgs = "jetbrains.idea-community"; };
+    pycharm-community-edition = { arch = "pycharm-community-edition"; nixpkgs = "jetbrains.pycharm-community"; };
   };
 
   # ── git beyond git ──────────────────────────────────────────────────────────────────────────
@@ -102,6 +122,10 @@
     crypt = { arch = "git-crypt"; nixpkgs = "git-crypt"; };
     transcrypt = { arch = "transcrypt"; nixpkgs = "transcrypt"; aur = true; };
     github-desktop = { arch = "github-desktop"; nixpkgs = "github-desktop"; };
+    # A graphical three-way diff/merge tool -- filed here rather than under `editors` because what
+    # you reach for it FOR is `git difftool` / `git mergetool`, the same slot `delta` above fills
+    # for reading a diff. It resolves a conflict; it is not where you write code.
+    meld = { arch = "meld"; nixpkgs = "meld"; };
   };
 
   # ── Document processing LIBRARIES ───────────────────────────────────────────────────────────
