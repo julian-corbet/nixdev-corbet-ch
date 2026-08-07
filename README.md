@@ -46,6 +46,11 @@ at all.
 - **Document processing libraries versus document rendering.** On purpose: `pypdf` and `pdfplumber`
   are libraries you script with, so they live here. `typst` (a typesetter whose output you read)
   lives in nixoffice. The difference is consumption: does a person look at it or only a program?
+- **Database tooling of any kind.** Wire-protocol shells, multi-engine command lines and the
+  inspectors that open a database file on disk all belong to
+  [nixdb](https://github.com/julian-corbet/nixdb-corbet-ch), the repository whose subject is
+  databases. "A developer uses it" is not the test — by that test this catalogue would swallow half
+  the machine.
 
 ## Repository layout
 

@@ -60,9 +60,11 @@
   # because both happen to be reached by an API key against a cloud vendor.
   # NOT `storage`: that group is remote OBJECT storage clients (s3cmd). Axiom stores structured
   # log/event datasets, not objects, and is never addressed by bucket/key.
-  # NOT `databases`: that group is LOCAL database FILE inspectors (bbolt, boltbrowser,
-  # sqlcipher) -- tools that open something on disk. Axiom has no local file to open; it is a
-  # remote SaaS query surface, the opposite shape. Hence its own group.
+  # NOT a database tool of any kind: every one of those -- the wire shells, the multi-engine
+  # command lines and the local FILE inspectors alike -- is catalogued in nixdb
+  # (github:julian-corbet/nixdb-corbet-ch), the repository whose subject is databases. Axiom has no
+  # database at either end: it is a remote SaaS query surface over log/event datasets. Hence its
+  # own group.
   observability = {
     # Axiom's own CLI (github.com/axiomhq/cli): query, stream, and manage datasets on the hosted
     # axiom.co log-analytics platform. AUR-only -- checked three ways on 2026-08-07: `pacman -Si
@@ -197,20 +199,6 @@
   typst = {
     tinymist = { arch = "tinymist"; nixpkgs = "tinymist"; };
     typstyle = { arch = "typstyle"; nixpkgs = "typstyle"; };
-  };
-
-  # ── Database inspection ─────────────────────────────────────────────────────────────────────
-  # Filed by what the tool IS -- a database inspector -- not by what happens to be inspected with
-  # it today. BoltDB is a general Go embedded key/value store; the only BoltDB user in this estate
-  # right now is the overlay's management server, but more will appear, and filing these tools
-  # under that overlay would age badly.
-  databases = {
-    # CLI for BoltDB, Go's embedded key/value store. AUR-only -- no nixpkgs derivation exists.
-    bbolt = { arch = "bbolt"; nixpkgs = null; aur = true; };
-    # TUI browser for BoltDB files.
-    boltbrowser = { arch = "boltbrowser"; nixpkgs = "boltbrowser"; aur = true; };
-    # SQLite with transparent 256-bit AES encryption.
-    sqlcipher = { arch = "sqlcipher"; nixpkgs = "sqlcipher"; };
   };
 
   # ── Build/dev ergonomics ────────────────────────────────────────────────────────────────────

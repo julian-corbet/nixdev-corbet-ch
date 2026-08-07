@@ -44,7 +44,6 @@ let
     (map (k: tools.documents.${k}) cfg.documents)
     (map (k: tools.typst.${k}) cfg.typst)
     (map (k: tools.editors.${k}) cfg.editors)
-    (map (k: tools.databases.${k}) cfg.databases)
   ];
 in
 {
@@ -62,7 +61,6 @@ in
     documents = mkGroup "document-processing libraries" tools.documents;
     typst = mkGroup "typst editor tooling (LSP, formatter)" tools.typst;
     editors = mkGroup "editors" tools.editors;
-    databases = mkGroup "database inspection tools" tools.databases;
 
     # ── Computed, read-only ───────────────────────────────────────────────────────────────────
     want = lib.mkOption {
