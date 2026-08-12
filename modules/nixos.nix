@@ -17,13 +17,44 @@ let
     if t ? nixpkgsOverride
     then t.nixpkgsOverride pkgs
     else lib.getAttrFromPath (lib.splitString "." t.nixpkgs) pkgs;
+
+  # `nixpkgsDesktop`: replace a desktop entry that nixpkgs ships wrong, or add one it omits. See
+  # lib/tools.nix's own header for the defect class; github-desktop is the case today, whose
+  # nixpkgs entry carries no `Categories=` line at all while Arch's says `Development;`, so the
+  # same application files under a different heading depending which machine it is on.
+  #
+  # symlinkJoin rather than overrideAttrs, because appending a postInstall invalidates the
+  # derivation and rebuilds from source -- an Electron application, to edit nine lines of text. A
+  # join is symlinks: one entry becomes a real file and every other path still points into the
+  # original output. `meta` is carried across explicitly; symlinkJoin drops it, and
+  # `meta.mainProgram` is read elsewhere in this family.
+  withDesktop = t: pkg:
+    if !(t ? nixpkgsDesktop) then pkg else
+    let
+      d = t.nixpkgsDesktop;
+      text = lib.concatStringsSep "\n"
+        ([ "[Desktop Entry]" ] ++ lib.mapAttrsToList (k: v: "${k}=${v}") d.entry);
+      file = pkgs.writeText d.file "${text}\n";
+    in
+    pkgs.symlinkJoin {
+      name = "${lib.getName pkg}-${lib.getVersion pkg}-desktop";
+      paths = [ pkg ];
+      # `rm -f` first: where the package ships the entry, $out holds a SYMLINK into a read-only
+      # store path and writing through it would fail. Where it ships none, this is a no-op.
+      postBuild = ''
+        mkdir -p $out/share/applications
+        rm -f $out/share/applications/${d.file}
+        cp ${file} $out/share/applications/${d.file}
+      '';
+      inherit (pkg) meta;
+    };
 in
 {
   imports = [ ./nixdev.nix ];
 
   config = {
     environment.systemPackages =
-      map packageFor (lib.filter resolves wanted);
+      map (t: withDesktop t (packageFor t)) (lib.filter resolves wanted);
 
     warnings =
       lib.optional (cfg.unavailableOnNixos != [ ]) ''

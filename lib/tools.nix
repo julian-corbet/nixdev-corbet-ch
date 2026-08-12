@@ -12,6 +12,19 @@
 # is not an oversight — it is the module telling a NixOS consumer that this selection cannot be
 # satisfied there, which is better than silently installing nothing.
 #
+# `nixpkgsDesktop` (optional, `{ file, entry }`) states what a tool's `.desktop` entry must say on
+# the NixOS plane. Both planes are supposed to deliver the same tool, and occasionally they
+# disagree about the MENU rather than the binary: `github-desktop`'s nixpkgs entry carries no
+# `Categories=` line at all where Arch's says `Development;`, so the identical application files
+# under a different heading depending which machine it is on. That is not a launcher's problem to
+# work around — it is an incomplete declaration, and it belongs here where the tool is declared.
+#
+# The WHOLE entry is stated, not a patch of selected keys: patching means `sed` over values this
+# file supplies, and an entry that inherits unnamed keys from upstream can drift the moment
+# upstream edits them — the exact silent divergence this field exists to end. The Arch backend
+# ignores the field entirely; Arch already ships these correctly, which is how the disagreement
+# becomes visible in the first place. Same field, same shape, as nixsh's own catalogue.
+#
 { ... }:
 {
   # ── Cloud provider CLIs ─────────────────────────────────────────────────────────────────────
@@ -164,7 +177,31 @@
     filter-repo = { arch = "git-filter-repo"; nixpkgs = "git-filter-repo"; };
     crypt = { arch = "git-crypt"; nixpkgs = "git-crypt"; };
     transcrypt = { arch = "transcrypt"; nixpkgs = "transcrypt"; aur = true; };
-    github-desktop = { arch = "github-desktop"; nixpkgs = "github-desktop"; };
+    github-desktop = {
+      arch = "github-desktop";
+      nixpkgs = "github-desktop";
+      # nixpkgs' entry carries NO `Categories=` line at all; Arch's says `Development;`. So the
+      # same application files under "Development" on one machine and under whatever a launcher
+      # calls its uncategorised bucket on the next -- which is how it was found, sitting in
+      # "Other" on the NixOS host and in Code on the two Arch ones.
+      #
+      # Transcribed from the nixpkgs entry with the missing line added, so nothing else about it
+      # changes. `Exec` is nixpkgs' own (`github-desktop %u`), NOT Arch's absolute /usr/bin path,
+      # because this correction only ever applies to the nixpkgs package.
+      nixpkgsDesktop = {
+        file = "github-desktop.desktop";
+        entry = {
+          Type = "Application";
+          Name = "GitHub Desktop";
+          Comment = "Focus on what matters instead of fighting with Git";
+          Exec = "github-desktop %u";
+          Icon = "github-desktop";
+          Terminal = "false";
+          Categories = "Development;RevisionControl;";
+          MimeType = "x-scheme-handler/x-github-client;x-scheme-handler/x-github-desktop-auth;x-scheme-handler/x-github-desktop-dev-auth;";
+        };
+      };
+    };
     # A graphical three-way diff/merge tool -- filed here rather than under `editors` because what
     # you reach for it FOR is `git difftool` / `git mergetool`, the same slot `delta` above fills
     # for reading a diff. It resolves a conflict; it is not where you write code.
