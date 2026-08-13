@@ -240,6 +240,10 @@
 
   # ── Build/dev ergonomics ────────────────────────────────────────────────────────────────────
   build = {
+    gcc = {
+      arch = "gcc";
+      nixpkgs = "gcc";
+    };
     just = { arch = "just"; nixpkgs = "just"; };
     mold = { arch = "mold"; nixpkgs = "mold"; };
     ccache = { arch = "ccache"; nixpkgs = "ccache"; };
