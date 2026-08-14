@@ -111,8 +111,19 @@
 
   # ── Rust ───────────────────────────────────────────────────────────────────────────────────
   rust = {
-    # rustup, not rust: a toolchain manager, because Rust projects routinely need a pinned or
-    # nightly compiler and a single host rustc cannot express that.
+    # A complete stable host floor. On Arch the `rust` package already supplies rustc, cargo,
+    # rustfmt and Clippy; on NixOS those are separate derivations, so expose one joined package
+    # with the compiler, Cargo, formatter, linter, and language server together.
+    stable-toolchain = {
+      arch = "rust";
+      nixpkgs = "rustc";
+      nixpkgsOverride = pkgs: pkgs.symlinkJoin {
+        name = "rust-stable-toolchain-${pkgs.rustc.version}";
+        paths = with pkgs; [ rustc cargo rustfmt clippy rust-analyzer ];
+      };
+    };
+    # Keep rustup as the alternative for hosts that need per-project pinned or nightly compilers.
+    # A host selects this OR stable-toolchain: both provide the same command names.
     rustup = { arch = "rustup"; nixpkgs = "rustup"; };
     cargo-tauri = { arch = "cargo-tauri"; nixpkgs = "cargo-tauri"; };
   };

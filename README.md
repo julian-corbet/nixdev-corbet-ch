@@ -34,10 +34,12 @@ at all.
 - **Editor configuration.** How an editor is configured belongs to nixarch's home/dev.nix or a
   user's dotfiles, not here. Terminal-native editors (neovim and helix) are catalogued by nixsh;
   nixdev names graphical development editors only.
-- **Language toolchain configuration.** This module offers `nixdev.rust = [ "rustup" ];` and
-  `nixdev.python = [ "python" "uv" ];` as host floors. Per-project Rust versions, Python
-  dependencies, virtual environments, Python versions, and Python CLI tools belong to each
-  project's own build files and `uv.lock`, not to a host-level declaration.
+- **Language toolchain configuration.** This module offers
+  `nixdev.rust = [ "stable-toolchain" ];` (rustc, Cargo, rustfmt, Clippy, and rust-analyzer) or
+  `nixdev.rust = [ "rustup" ];` as mutually exclusive host floors, plus
+  `nixdev.python = [ "python" "uv" ];`. Per-project Rust versions, Python dependencies, virtual
+  environments, Python versions, and Python CLI tools belong to each project's own build files
+  and `uv.lock`, not to a host-level declaration.
 - **Build orchestration.** A host that has `just` does not hereby declare how to use it; that is
   a Justfile's concern.
 - **Git configuration and workflows.** nixdev installs git binaries (git-lfs, git-filter-repo,
