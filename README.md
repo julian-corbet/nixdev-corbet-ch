@@ -97,7 +97,9 @@ declarable at all, so a deployment can decline to stamp them and cannot loosen t
 
 The bar is byte-identical rendering: `checks/cluster-parity.nix` renders a nixdev declaration and a
 hand-written grammar block into two environments and diffs the trees. An adopter's apps are already
-running, and a manifest that moves is a sync.
+running, and a manifest that moves is a sync. `adopt` — server-side apply and diff, for taking over
+objects that already exist — is therefore a declaration term and not a catalogue one: whether a
+Deployment of this name is already running is that cluster's history, not a fact about the software.
 
 ## Platform support
 

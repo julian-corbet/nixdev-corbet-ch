@@ -128,6 +128,11 @@ let
       && workbench.security.allowPrivilegeEscalation == null
       && workbench.security.seccomp == null;
 
+    # Whether an object is already there is that cluster's history, not the software's nature, so
+    # the catalogue has no say and the default is the one that creates rather than takes over.
+    "adoption is a declaration's own term, and unstated means creating rather than taking over" =
+      workbench.adopt == true && snippets.adopt == false;
+
     "resources are four named scalars, and an unset one renders no key" =
       workbench.resources.requests == { cpu = "10m"; memory = "16Mi"; }
       && workbench.resources.limits == { memory = "128Mi"; }

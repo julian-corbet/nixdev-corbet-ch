@@ -88,6 +88,7 @@
   nixk3s.apps.example-workbench = {
     namespace = "example-devtools";
     project = "example-swe";
+    adopt = true;
 
     image = "registry.example.com/example-org/example-workbench:0.0.0@sha256:0000000000000000000000000000000000000000000000000000000000000000";
     ports.http.number = 8080;

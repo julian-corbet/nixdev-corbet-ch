@@ -18,8 +18,9 @@
 #     hardening classes it is catalogued as tolerating, and lengthening one probe budget because
 #     the request that wakes it is held open while it boots;
 #   - a tool that writes nothing at all, joining that namespace rather than creating a second one,
-#     permanently resident, pinned by digest, bounded by requests and a limit — and rendering NO
-#     securityContext, which is the adoption position: a live pod acquires one by being replaced.
+#     permanently resident, pinned by digest, bounded by requests and a limit — and ADOPTING an
+#     object that is already running, which is why it renders NO securityContext either: a live pod
+#     acquires one by being replaced.
 {
   # Required by the nixidy environment itself, not by any module here.
   nixidy.target.repository = "https://example.com/example-org/example-gitops.git";
@@ -84,8 +85,14 @@
     exposure = "public";
     slot = 41;
 
-    # NO securityContext on this pod, and the module warns about it. This is the adoption position
-    # and it is written down rather than defaulted into: the objects this declaration takes over
+    # TAKES OVER an object that is already running rather than creating one, which is that
+    # cluster's history and nothing about the software: the same tool is adopted here and created
+    # fresh somewhere else. It renders the Application with server-side apply and diff, so what is
+    # compared is what the API server actually holds.
+    adopt = true;
+
+    # NO securityContext on this pod, and the module warns about it. The same position, one layer
+    # down and written down rather than defaulted into: the objects this declaration takes over
     # were created before the classes existed, a pod acquires a securityContext only by being
     # replaced, and the commit that adopts an app is not the commit that is allowed to roll it.
     harden = false;

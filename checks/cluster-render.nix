@@ -120,6 +120,21 @@ pkgs.runCommand "nixdev-cluster-render"
     check "$(basename $f) no nodePort" "null" "$(y '.spec.ports[0].nodePort' $f)"
   done
 
+  # ADOPTION IS A DECLARATION'S FACT, and the Application is the only object that shows it. Both
+  # directions are asserted, because a translator that hard-wired the flag on would render every
+  # app as an adoption and a translator that dropped it would render every adoption as a creation --
+  # and each of those is a rollout on somebody's live service.
+  echo "== the workload that adopts syncs and diffs server-side, and the one that does not, does not =="
+  snipa="$manifests/apps/Application-example-snippets.yaml"
+  worka="$manifests/apps/Application-example-workbench.yaml"
+  check "workbench applies server-side" "ServerSideApply=true" \
+    "$(y '.spec.syncPolicy.syncOptions[0]' $worka)"
+  check "workbench diffs server-side" "ServerSideDiff=true" \
+    "$(y '.metadata.annotations["argocd.argoproj.io/compare-options"]' $worka)"
+  # Not "an empty list": the app nobody declared as adopting must carry no sync option at all.
+  check "snippets declares no sync option" "null" "$(y '.spec.syncPolicy.syncOptions' $snipa)"
+  check "snippets is annotated with nothing"  "null" "$(y '.metadata.annotations' $snipa)"
+
   # `-L` is load-bearing: the rendered tree is SYMLINKS into the store, so a plain `-type f`
   # matches nothing and returns a confident zero. A count that can only ever be zero is worse than
   # no check, because it passes the moment somebody expects zero.

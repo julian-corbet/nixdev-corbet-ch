@@ -148,7 +148,7 @@ let
   mkApp = x:
     let inherit (x) entry w; in
     {
-      inherit (w) namespace createNamespace project exposure scaling;
+      inherit (w) namespace createNamespace project exposure scaling adopt;
       image = imageOf entry w;
       ports = portsOf entry;
       state = stateOf entry w;
@@ -430,6 +430,31 @@ let
       description = ''
         Which front wakes it from zero. Meaningless unless `scaling = "scale-to-zero"`, and its
         absence there is warned about: nothing brings the workload back.
+      '';
+    };
+
+    adopt = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether this workload TAKES OVER objects that already exist in the cluster, rather than
+        creating them. Renders the Application with server-side apply and server-side diff, so the
+        delivery controller compares against what the API server actually holds instead of against
+        a client-side reconstruction of it.
+
+        IT IS A DEPLOYMENT'S FACT AND NOT THE CATALOGUE'S, which is why it is here and not in
+        `lib/applications.nix`. Whether a Deployment of this name is already running -- applied by
+        an addon, by hand, or by the manifest this declaration replaces -- is that cluster's
+        HISTORY, not anything true about the software. The same tool adopted on one cluster and
+        created fresh on another is the same tool, and differs here and nowhere else.
+
+        It shrinks the diff; it does not make it zero. A rendered spec is never byte-identical to
+        the YAML it replaces, and for a workload whose `state` forces `Recreate` a remaining diff
+        is a sync and a sync is downtime -- the old pod stops before the new one starts. Render it,
+        diff it against what is live, and decide knowingly.
+
+        Defaults to false, matching the grammar underneath: a workload nobody has said anything
+        about is one being created, not one being taken over.
       '';
     };
 
