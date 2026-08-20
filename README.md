@@ -39,7 +39,9 @@ at all.
   `nixdev.rust = [ "rustup" ];` as mutually exclusive host floors, plus
   `nixdev.python = [ "python" "uv" ];`. Per-project Rust versions, Python dependencies, virtual
   environments, Python versions, and Python CLI tools belong to each project's own build files
-  and `uv.lock`, not to a host-level declaration.
+  and `uv.lock`, not to a host-level declaration. The narrow `nixdev.pythonLibraries` catalogue is
+  for explicitly approved cross-repository scripting capabilities such as PyYAML; on NixOS these
+  are assembled into the selected interpreter rather than merely placed beside it in the closure.
 - **Build orchestration.** A host that has `just` does not hereby declare how to use it; that is
   a Justfile's concern.
 - **Git configuration and workflows.** nixdev installs git binaries (git-lfs, git-filter-repo,
@@ -65,7 +67,8 @@ at all.
 ## Platform support
 
 **NixOS:** Full. Options resolve to nixpkgs attributes; the NixOS backend installs them via
-`environment.systemPackages`.
+`environment.systemPackages`. Selected Python modules are assembled into the selected interpreter
+with `python.withPackages`, so host-library selection means the module is actually importable.
 
 **Arch / CachyOS (via system-manager):** Publishes `nixdev.archPackages` and `nixdev.aurPackages`
 for the host to consume via its own reconciler (e.g., nixarch). Cannot install anything itself,

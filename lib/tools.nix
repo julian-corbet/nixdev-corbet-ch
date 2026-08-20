@@ -132,8 +132,21 @@
   # The host-level floor: an interpreter plus uv. Project pyproject.toml and uv.lock files own
   # every dependency, virtual environment, Python version, and Python CLI beyond these two.
   python = {
-    python = { arch = "python"; nixpkgs = "python3"; };
+    # `pythonInterpreter` lets the NixOS backend replace the bare interpreter with one environment
+    # containing every explicitly selected host library. Merely adding `python3Packages.<name>` to
+    # `environment.systemPackages` puts files in the system closure but does NOT put their
+    # site-packages directory on Python's import path.
+    python = { arch = "python"; nixpkgs = "python3"; pythonInterpreter = true; };
     uv = { arch = "uv"; nixpkgs = "uv"; };
+  };
+
+  # ── Shared Python libraries ────────────────────────────────────────────────────────────────
+  # These are deliberate host capabilities used by operator scripts across repositories. They
+  # are NOT a substitute for project pyproject.toml/uv.lock dependencies. `pythonModule` is a
+  # backend contract: Arch installs the distro package into its system interpreter, while NixOS
+  # assembles the selected modules with the selected interpreter through `python.withPackages`.
+  pythonLibraries = {
+    pyyaml = { arch = "python-yaml"; nixpkgs = "python3Packages.pyyaml"; pythonModule = true; };
   };
 
   # ── Editors ─────────────────────────────────────────────────────────────────────────────────
@@ -224,12 +237,13 @@
   # look at them. A PDF you read is office; a PDF you parse is dev, and the same file can be both
   # depending on who opens it.
   documents = {
-    pypdf = { arch = "python-pypdf"; nixpkgs = "python3Packages.pypdf"; };
-    pymupdf = { arch = "python-pymupdf"; nixpkgs = "python3Packages.pymupdf"; };
+    pypdf = { arch = "python-pypdf"; nixpkgs = "python3Packages.pypdf"; pythonModule = true; };
+    pymupdf = { arch = "python-pymupdf"; nixpkgs = "python3Packages.pymupdf"; pythonModule = true; };
     pdfplumber = {
       arch = "python-pdfplumber";
       nixpkgs = "python3Packages.pdfplumber";
       aur = true;
+      pythonModule = true;
       nixpkgsOverride = pkgs:
         pkgs.python3Packages.pdfplumber.override {
           pandas-stubs = pkgs.python3Packages.pandas-stubs.overridePythonAttrs (_: {
@@ -238,7 +252,7 @@
           });
         };
     };
-    extract-msg = { arch = "python-extract-msg"; nixpkgs = "python3Packages.extract-msg"; aur = true; };
+    extract-msg = { arch = "python-extract-msg"; nixpkgs = "python3Packages.extract-msg"; aur = true; pythonModule = true; };
   };
 
   # ── Typst tooling ───────────────────────────────────────────────────────────────────────────

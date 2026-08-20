@@ -17,6 +17,17 @@ let
     if t ? nixpkgsOverride
     then t.nixpkgsOverride pkgs
     else lib.getAttrFromPath (lib.splitString "." t.nixpkgs) pkgs;
+  pythonModules = lib.filter (t: t.pythonModule or false) wanted;
+  pythonInterpreters = lib.filter (t: t.pythonInterpreter or false) wanted;
+  ordinaryWanted = lib.filter
+    (t: !(t.pythonModule or false) && !(t.pythonInterpreter or false))
+    wanted;
+  pythonEnvironment =
+    if pythonInterpreters == [ ] then null else
+    let
+      interpreter = packageFor (builtins.head pythonInterpreters);
+    in
+    interpreter.withPackages (_: map packageFor (lib.filter resolves pythonModules));
 
   # `nixpkgsDesktop`: replace a desktop entry that nixpkgs ships wrong, or add one it omits. See
   # lib/tools.nix's own header for the defect class; github-desktop is the case today, whose
@@ -53,8 +64,20 @@ in
   imports = [ ./nixdev.nix ];
 
   config = {
+    assertions = [
+      {
+        assertion = pythonModules == [ ] || builtins.length pythonInterpreters == 1;
+        message = "nixdev: select exactly one interpreter through nixdev.python when selecting host-level Python libraries.";
+      }
+      {
+        assertion = builtins.length pythonInterpreters <= 1;
+        message = "nixdev: select no more than one Python interpreter.";
+      }
+    ];
+
     environment.systemPackages =
-      map (t: withDesktop t (packageFor t)) (lib.filter resolves wanted);
+      map (t: withDesktop t (packageFor t)) (lib.filter resolves ordinaryWanted)
+      ++ lib.optional (pythonEnvironment != null) pythonEnvironment;
 
     warnings =
       lib.optional (cfg.unavailableOnNixos != [ ]) ''
