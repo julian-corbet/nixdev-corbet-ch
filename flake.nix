@@ -90,6 +90,17 @@
             clusterModule = self.nixidyModules.nixdev;
             values = ./examples/all/values.nix;
           };
+
+          # THE ADOPTION BAR: the same two workloads written out by hand in the grammar underneath,
+          # rendered separately and diffed against the translator's tree. Byte-identical or the
+          # check is red, because for an adopter a changed byte is a sync and a sync is a rollout.
+          cluster-parity = import ./checks/cluster-parity.nix {
+            inherit pkgs lib nixidy;
+            appsModule = nixk3s.nixidyModules.apps;
+            clusterModule = self.nixidyModules.nixdev;
+            values = ./examples/all/values.nix;
+            grammar = ./examples/parity/grammar.nix;
+          };
         });
 
       formatter = forAllSystems (system: (pkgsFor system).nixpkgs-fmt);

@@ -60,9 +60,44 @@ at all.
 
 | Path | Purpose |
 |---|---|
-| `flake.nix` | Flake entry point: `nixosModules.default` (NixOS install), `systemManagerModules.default` (Arch publish), and `nixdev.nix` (the module itself). |
-| `modules/` | Platform backends: `nixos.nix` and `arch.nix`. |
+| `flake.nix` | Flake entry point: `nixosModules.default` (NixOS install), `systemManagerModules.default` (Arch publish), `nixidyModules.default` (the cluster plane), and `nixdev.nix` (the module itself). |
+| `modules/` | Platform backends: `nixos.nix` and `arch.nix`, plus `cluster.nix`. |
 | `lib/tools.nix` | The tool catalogue: one entry per selectable tool, with platform-specific package names. |
+| `lib/applications.nix` | The cluster catalogue: one entry per tool that runs in the cluster — what the software IS, everywhere. |
+| `examples/` | `all/values.nix` declares every term the cluster module has; `parity/grammar.nix` is the same two workloads written by hand in the grammar underneath. |
+| `checks/` | What the cluster module resolves and refuses, what its manifests say, and that both trees are the same bytes. |
+
+## The cluster plane
+
+The developer's tools that run in the cluster rather than on a desk are declared with
+`nixdev.applications.<name>`, and this module renders no Kubernetes object of its own: it defines
+into the app grammar published by
+[nixk3s](https://github.com/julian-corbet/nixk3s-corbet-ch), which owns Applications, Namespaces,
+Deployments and Services. Import that grammar alongside this module.
+
+What this repository adds is the half the grammar cannot know — what these particular tools ARE —
+and four fields are split down the middle rather than assigned to a side:
+
+| Field | `lib/applications.nix` knows | A declaration supplies |
+|---|---|---|
+| `state` | WHERE inside the container a directory lives | WHAT BACKS IT — a claim or a node path |
+| `probes` | WHICH probes the software warrants, what they ask for, how fast it answers | THIS cluster's patience budget |
+| `credentials` | WHICH ENVIRONMENT VARIABLES carry secret material | WHICH SECRET delivers them, and under which keys |
+| `hardening` | what the software TOLERATES, as classes | whether to STAMP those classes on the pod (`harden`) |
+
+Each is refused in both directions: a tool that writes a database and is declared without a backing
+does not render onto a pod's ephemeral filesystem, a tool that reads no credential may not name a
+Secret, and a budget for a probe the software does not warrant is an eval error rather than an
+attribute quietly dropped on the way to the manifest.
+
+Nothing here forwards a nested attrset into the grammar untouched. `resources` names four scalars
+rather than taking a free-form resource map, because a map is how a device request — which is a
+fact about the software — arrives through a deployment; and the hardening classes are not
+declarable at all, so a deployment can decline to stamp them and cannot loosen them.
+
+The bar is byte-identical rendering: `checks/cluster-parity.nix` renders a nixdev declaration and a
+hand-written grammar block into two environments and diffs the trees. An adopter's apps are already
+running, and a manifest that moves is a sync.
 
 ## Platform support
 
