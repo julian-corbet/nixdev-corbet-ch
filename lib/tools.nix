@@ -273,7 +273,10 @@
     mold = { arch = "mold"; nixpkgs = "mold"; };
     ccache = { arch = "ccache"; nixpkgs = "ccache"; };
     patchelf = { arch = "patchelf"; nixpkgs = "patchelf"; };
-    cmake = { arch = "cmake"; nixpkgs = "cmake"; };
+    # Arch's cmake package includes cmake-gui. nixpkgs splits that frontend into
+    # cmakeWithGui, so select the GUI-enabled derivation to keep the capability
+    # identical across platforms.
+    cmake = { arch = "cmake"; nixpkgs = "cmakeWithGui"; };
     tidy = { arch = "tidy"; nixpkgs = "html-tidy"; };
     linuxdeploy-appimage = { arch = "linuxdeploy-appimage"; nixpkgs = "linuxdeploy"; aur = true; };
     buildah = { arch = "buildah"; nixpkgs = "buildah"; };
