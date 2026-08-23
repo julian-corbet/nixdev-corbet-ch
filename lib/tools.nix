@@ -166,9 +166,10 @@
   # graphical development editors belong in this table.
   editors = {
     zed = { arch = "zed"; nixpkgs = "zed-editor"; };
-    # The MIT-licensed build, not Microsoft's branded binary -- that one is AUR-only on Arch and
-    # unfree in nixpkgs, so it would not resolve cleanly on either platform from this table.
-    vscode = { arch = "code"; nixpkgs = "vscodium"; };
+    # Microsoft's official distribution, deliberately selected because its licence permits the
+    # Visual Studio Marketplace and Microsoft-only integrations. It is AUR-only on Arch and
+    # unfree in nixpkgs; consumers must enable those package policies explicitly.
+    vscode = { arch = "visual-studio-code-bin"; nixpkgs = "vscode"; aur = true; };
     gnome-builder = { arch = "gnome-builder"; nixpkgs = "gnome-builder"; };
     qtcreator = { arch = "qtcreator"; nixpkgs = "qtcreator"; };
     # JetBrains' two Apache-2.0 IDEs, and the one pair in this table where the obvious nixpkgs name
