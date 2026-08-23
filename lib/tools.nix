@@ -172,24 +172,20 @@
     vscode = { arch = "visual-studio-code-bin"; nixpkgs = "vscode"; aur = true; };
     gnome-builder = { arch = "gnome-builder"; nixpkgs = "gnome-builder"; };
     qtcreator = { arch = "qtcreator"; nixpkgs = "qtcreator"; };
-    # JetBrains' two Apache-2.0 IDEs, and the one pair in this table where the obvious nixpkgs name
-    # is a TRAP. JetBrains merged its Community and Ultimate editions into a single distribution in
-    # 2025, and nixpkgs followed: `jetbrains.idea-community` and `jetbrains.pycharm-community` are
-    # now aliases that THROW ("has been removed as it has been discontinued"), while the bare
-    # `jetbrains.idea` / `jetbrains.pycharm` are the unified, UNFREE distribution. The open-source
-    # builds -- Apache-2.0, the same licence Arch's own packages carry -- kept the `-oss` suffix,
-    # and those are what belong here.
+    # JetBrains' Community aliases in nixpkgs are a trap: they THROW after the upstream products
+    # were unified, so an attribute-existence check can pass while a real system build fails.
     #
     # This is the class of error `lib.hasAttrByPath` cannot see: a throwing alias IS present as an
     # attribute, so modules/nixos.nix's own `resolves` guard passes it and the failure only appears
     # when a consumer force-evaluates its whole system closure. Verified by force-evaluation, not
     # by existence, against nixpkgs 38a4887411571457d700c51c64a6e49ead2ed5ab.
     #
-    # Keys are the full pacman names rather than a shortened `intellij`/`pycharm`, because the very
-    # distinction the upstream merge blurred -- which edition -- is one a selection should have to
-    # state out loud.
+    # IntelliJ's open-source build remains a distinct selection. PyCharm does not: 2025.2 was the
+    # final standalone Community Edition, and current PyCharm is one distribution whose core
+    # remains free while Pro features are subscription-gated. Use that maintained upstream binary
+    # on both platforms: the AUR package downloads it on Arch and nixpkgs exposes it directly.
     intellij-idea-community-edition = { arch = "intellij-idea-community-edition"; nixpkgs = "jetbrains.idea-oss"; };
-    pycharm-community-edition = { arch = "pycharm-community-edition"; nixpkgs = "jetbrains.pycharm-oss"; };
+    pycharm = { arch = "pycharm"; nixpkgs = "jetbrains.pycharm"; aur = true; };
   };
 
   # ── git beyond git ──────────────────────────────────────────────────────────────────────────
