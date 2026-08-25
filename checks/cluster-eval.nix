@@ -200,7 +200,7 @@ let
         (with' { nixdev.applications.example-workbench.createNamespace = true; });
 
     "two workloads on one slot is refused" =
-      failsWith "is claimed by 2 applications"
+      failsWith "is claimed by 2 workloads"
         (with' { nixdev.applications.example-workbench.slot = 40; });
 
     # ── The warnings that are not refusals ────────────────────────────────────────────────────

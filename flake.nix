@@ -59,8 +59,31 @@
 
       # The cluster plane: the developer's tools that run in the cluster rather than on a desk.
       # Only one module in the class, so `.default` is honest rather than invented.
-      nixidyModules.nixdev = ./modules/cluster.nix;
-      nixidyModules.default = ./modules/cluster.nix;
+      #
+      # BUILT FROM THE GRAMMAR'S OWN CONSUMER FACTORY rather than hand-written here, and the
+      # reason is measured rather than aesthetic. This module used to be 722 lines, of which the
+      # parts that were genuinely nixdev's came to about twenty: `addressingOf` was byte-identical
+      # to the same function in eight sibling repositories, `imageOf` to six, and the probe, state,
+      # ports and secrets helpers to eleven or twelve apiece. Fourteen copies of one design, each
+      # ageing on its own -- which is exactly how `adopt` reached eight of thirteen translators and
+      # stopped, and how five repositories kept a different name for the same platform option for
+      # two weeks with nothing able to notice.
+      #
+      # What was nixdev's is entirely in `lib/applications.nix`: which of these tools writes a
+      # database file and therefore cannot roll, which is a static bundle that keeps nothing, how
+      # patient a probe must be before it calls a slow start a failure, which variables carry a
+      # credential, what each one can be locked down to. That is knowledge about software and it
+      # stays here. The vocabulary for DECLARING one, and every guard on it, is the grammar's and
+      # now comes from the grammar.
+      #
+      # nixdev needs no `extend`: every field its catalogue carries is one the factory already
+      # knows. A repository whose catalogue holds something genuinely its own -- a WOPI host list,
+      # a retention argument, a write probe -- passes it there instead of forking the translator.
+      nixidyModules.nixdev = nixk3s.lib.mkConsumerModule {
+        namespace = "nixdev";
+        catalogue = self.lib.applications;
+      };
+      nixidyModules.default = self.nixidyModules.nixdev;
 
       # The catalogues, exposed so a consumer can inspect or validate them without re-reading the
       # files.
