@@ -174,7 +174,7 @@ let
         (lib.recursiveUpdate base { nixdev.applications.example-snippets.state = lib.mkForce { }; });
 
     "a directory backed by both a claim and a node path is refused" =
-      failsWith "EITHER an existing claim OR a node path"
+      failsWith "EXACTLY ONE of a claim"
         (with' { nixdev.applications.example-snippets.state.data.claim = "example-claim"; });
 
     "budgeting a probe the software does not warrant is refused" =
