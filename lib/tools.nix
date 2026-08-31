@@ -275,6 +275,7 @@
     # identical across platforms.
     cmake = { arch = "cmake"; nixpkgs = "cmakeWithGui"; };
     tidy = { arch = "tidy"; nixpkgs = "html-tidy"; };
+    protobuf = { arch = "protobuf"; nixpkgs = "protobuf"; };
     linuxdeploy-appimage = { arch = "linuxdeploy-appimage"; nixpkgs = "linuxdeploy"; aur = true; };
     buildah = { arch = "buildah"; nixpkgs = "buildah"; };
     direnv = { arch = "direnv"; nixpkgs = "direnv"; };
