@@ -260,6 +260,46 @@
     typstyle = { arch = "typstyle"; nixpkgs = "typstyle"; };
   };
 
+  # ── Language servers ──────────────────────────────────────────────────────────────────────
+  # The LSP servers opencode's built-in `lsp` plane drives, for the languages this fleet
+  # actually works in. Each entry names the opencode server id it satisfies, because that --
+  # not the package name -- is what decides whether opencode starts it: a binary on PATH that
+  # opencode recognises for no extension never runs.
+  #
+  # Only servers opencode CANNOT fetch itself belong here. Half its catalogue auto-installs
+  # (clangd, lua-ls, terraform, yaml-ls, ... -- `OPENCODE_DISABLE_LSP_DOWNLOAD` is deliberately
+  # NOT set, so those keep self-provisioning as fallback), and typescript/eslint resolve from
+  # each project's own dependencies by design -- a host-level copy would satisfy neither
+  # opencode's detection nor this repo's rule that project dependencies live with the project.
+  # What remains is what opencode needs a host to provide as a command. Verified 2026-09-04:
+  # every `arch` name against archlinux.org + the AUR RPC + `pacman -Si` on CachyOS, every
+  # `nixpkgs` name by force-evaluating the derivation's `name` at nixpkgs-unstable HEAD
+  # (existence alone cannot tell a live attribute from a rename-to-throw).
+  lsp = {
+    # opencode server `nixd`, extensions .nix. THE fleet language -- host files, modules and
+    # checks are all nix. AUR-only on Arch (upstream Arch packages no nixd; `nixd` 2.9.2-1,
+    # current with nixpkgs' nixd-2.9.2), a top-level derivation on NixOS.
+    nixd = { arch = "nixd"; nixpkgs = "nixd"; aur = true; };
+    # opencode server `rust`, extensions .rs. Needs the `rust-analyzer` command: present on
+    # NixOS inside this repo's own stable-toolchain join, an `extra` package of its own on
+    # Arch (the `rust` package ships only the proc-macro helper lib, NOT the command -- no
+    # file conflict selecting both). The entry is what makes it deterministic on all three
+    # hosts rather than a `rustup component add` accident.
+    rust-analyzer = { arch = "rust-analyzer"; nixpkgs = "rust-analyzer"; };
+    # opencode server `gopls`, extensions .go. The documented requirement is the `go` command
+    # (already selected via `languages`), but the server binary itself is declared too rather
+    # than left to opencode's own `go install`: deterministic, offline-safe, auditable.
+    gopls = { arch = "gopls"; nixpkgs = "gopls"; };
+    # opencode server `pyright`, extensions .py/.pyi. The documented requirement is an
+    # installed `pyright`; the host provides the command, projects keep their own type-check
+    # configuration where it belongs.
+    pyright = { arch = "pyright"; nixpkgs = "pyright"; };
+    # opencode server `bash`, extensions .sh/.bash/.zsh/.ksh. opencode would auto-install
+    # bash-language-server on first use, but the fleet's installers and reconciler scripts ARE
+    # shell -- so the server is a first-class host capability, not a lazily fetched one.
+    bash-language-server = { arch = "bash-language-server"; nixpkgs = "bash-language-server"; };
+  };
+
   # ── Build/dev ergonomics ────────────────────────────────────────────────────────────────────
   build = {
     gcc = {

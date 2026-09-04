@@ -44,6 +44,7 @@ let
     (map (k: tools.build.${k}) cfg.build)
     (map (k: tools.documents.${k}) cfg.documents)
     (map (k: tools.typst.${k}) cfg.typst)
+    (map (k: tools.lsp.${k}) cfg.lsp)
     (map (k: tools.editors.${k}) cfg.editors)
   ];
 in
@@ -62,6 +63,7 @@ in
     build = mkGroup "build and dev ergonomics" tools.build;
     documents = mkGroup "document-processing libraries" tools.documents;
     typst = mkGroup "typst editor tooling (LSP, formatter)" tools.typst;
+    lsp = mkGroup "language servers (opencode LSP plane)" tools.lsp;
     editors = mkGroup "editors" tools.editors;
 
     # ── Computed, read-only ───────────────────────────────────────────────────────────────────
