@@ -1,9 +1,7 @@
 name: ci
 
+# Manual fallback; trusted verification runs through Crow (see ci/README.md).
 on:
-  push:
-    branches: [main]
-  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -22,4 +20,4 @@ jobs:
       # turn a strict inventory check into a cross-build. --all-systems is still required: it
       # proves every system the flake actually claims instead of relying on the runner default.
       - name: nix flake check (all declared systems)
-        run: nix flake check --all-systems --keep-going --print-build-logs
+        run: ci/check all-systems
